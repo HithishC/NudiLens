@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>NudiLens — ಕನ್ನಡದ ಡಿಜಿಟಲ್ ಕನ್ನಡಿ</title>
+
+  <!-- Kannada OCR -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family:
+        "Noto Sans Kannada",
+        "Nirmala UI",
+        system-ui,
+        sans-serif;
+
+      background:
+        radial-gradient(
+          circle at 15% 10%,
+          rgba(167,108,255,.18),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 90% 15%,
+          rgba(0,220,255,.12),
+          transparent 28%
+        ),
+        linear-gradient(
+          135deg,
+          #090612,
+          #12091f 45%,
+          #07131b
+        );
+
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+
+      background:
+        linear-gradient(
+          rgba(255,255,255,.015) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.015) 1px,
+          transparent 1px
+        );
+
+      background-size: 40px 40px;
+
+      mask-image:
+        linear-gradient(
+          to bottom,
+          black,
+          transparent
+        );
+
+      z-index: -1;
+    }
+
+
+    /* =========================
+       NAVIGATION
+    ========================= */
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+
+      height: 76px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 6%;
+
+      background:
+        rgba(9,6,18,.72);
+
+      backdrop-filter: blur(18px);
+
+      border-bottom:
+        1px solid rgba(255,255,255,.08);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .logo-mark {
+      width: 42px;
+      height: 42px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 13px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #a76cff,
+          #00dcff
+        );
+
+      color: white;
+      font-size: 22px;
+
+      box-shadow:
+        0 0 25px rgba(167,108,255,.35);
+    }
+
+    .logo span {
+      display: block;
+
+      color: #bdb5ca;
+
+      font-size: 12px;
+      font-weight: 500;
+
+      margin-top: 2px;
+    }
+
+    nav a {
+      color: #d7d1df;
+      text-decoration: none;
+
+      margin-left: 28px;
+
+      font-size: 14px;
+
+      transition: .25s;
+    }
+
+    nav a:hover {
+      color: white;
+    }
+
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+      min-height: 680px;
+
+      padding:
+        75px 6%
+        80px;
+
+      display: grid;
+
+      grid-template-columns:
+        1.05fr .95fr;
+
+      gap: 40px;
+
+      align-items: center;
+
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+
+      position: absolute;
+
+      width: 420px;
+      height: 420px;
+
+      right: 5%;
+      top: 10%;
+
+      background:
+        rgba(0,220,255,.06);
+
+      filter: blur(80px);
+
+      border-radius: 50%;
+
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+
+      align-items: center;
+      gap: 8px;
+
+      padding:
+        8px 14px;
+
+      border-radius: 999px;
+
+      background:
+        rgba(167,108,255,.1);
+
+      border:
+        1px solid
+        rgba(167,108,255,.3);
+
+      color: #d5baff;
+
+      font-size: 13px;
+
+      margin-bottom: 22px;
+    }
+
+    .eyebrow::before {
+      content: "";
+
+      width: 7px;
+      height: 7px;
+
+      border-radius: 50%;
+
+      background: #00dcff;
+
+      box-shadow:
+        0 0 10px #00dcff;
+    }
+
+    h1 {
+      font-size:
+        clamp(48px, 7vw, 88px);
+
+      line-height: .98;
+
+      letter-spacing: -4px;
+
+      margin-bottom: 24px;
+    }
+
+    .gradient-text {
+      background:
+        linear-gradient(
+          90deg,
+          #fff,
+          #d8bcff 45%,
+          #7beaff
+        );
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: #aaa1b5;
+
+      max-width: 600px;
+
+      font-size: 18px;
+
+      line-height: 1.8;
+
+      margin-bottom: 30px;
+    }
+
+    .hero-buttons {
+      display: flex;
+
+      gap: 14px;
+
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+
+      border-radius: 14px;
+
+      padding:
+        14px 22px;
+
+      font-size: 15px;
+
+      font-family: inherit;
+
+      cursor: pointer;
+
+      transition: .25s;
+    }
+
+    .btn-primary {
+      background:
+        linear-gradient(
+          135deg,
+          #a76cff,
+          #00bfe8
+        );
+
+      color: white;
+
+      box-shadow:
+        0 10px 30px
+        rgba(0,220,255,.16);
+    }
+
+    .btn-primary:hover {
+      transform:
+        translateY(-3px);
+
+      box-shadow:
+        0 15px 35px
+        rgba(0,220,255,.25);
+    }
+
+    .btn-secondary {
+      color: #ddd5e5;
+
+      background:
+        rgba(255,255,255,.05);
+
+      border:
+        1px solid
+        rgba(255,255,255,.1);
+    }
+
+    .btn-secondary:hover {
+      background:
+        rgba(255,255,255,.09);
+    }
+
+
+    /* =========================
+       CSS HERO ART
+       NO IMAGE
+    ========================= */
+
+    .hero-art {
+      width: min(480px,100%);
+      height: 390px;
+
+      position: relative;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      margin: auto;
+    }
+
+    .kannada-orb {
+      width: 330px;
+      height: 330px;
+
+      border-radius: 50%;
+
+      position: relative;
+
+      display: grid;
+      place-items: center;
+
+      background:
+        radial-gradient(
+          circle at 35% 30%,
+          rgba(167,108,255,.35),
+          rgba(0,220,255,.08) 45%,
+          rgba(255,255,255,.025) 70%
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,.13);
+
+      box-shadow:
+        0 30px 90px
+        rgba(0,0,0,.5),
+
+        inset 0 0 50px
+        rgba(167,108,255,.12),
+
+        0 0 70px
+        rgba(0,220,255,.08);
+    }
+
+    .kannada-orb::before {
+      content: "";
+
+      position: absolute;
+
+      inset: 18px;
+
+      border-radius: 50%;
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+    }
+
+    .kannada-orb::after {
+      content: "";
+
+      position: absolute;
+
+      width: 100px;
+      height: 100px;
+
+      border-radius: 50%;
+
+      background:
+        rgba(0,220,255,.1);
+
+      filter: blur(35px);
+
+      bottom: 25px;
+      right: 30px;
+    }
+
+    .big-kannada {
+      font-size: 145px;
+
+      font-weight: 800;
+
+      line-height: 1;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ffffff,
+          #d3b5ff 45%,
+          #63eaff
+        );
+
+      -webkit-background-clip: text;
+
+      -webkit-text-fill-color:
+        transparent;
+
+      filter:
+        drop-shadow(
+          0 0 25px
+          rgba(0,220,255,.35)
+        );
+
+      z-index: 2;
+    }
+
+    .orb-ring {
+      position: absolute;
+
+      width: 390px;
+      height: 390px;
+
+      border-radius: 50%;
+
+      border:
+        1px solid
+        rgba(167,108,255,.18);
+
+      transform:
+        rotate(-18deg);
+    }
+
+    .orb-ring::before {
+      content: "";
+
+      position: absolute;
+
+      width: 9px;
+      height: 9px;
+
+      border-radius: 50%;
+
+      background: #00dcff;
+
+      box-shadow:
+        0 0 20px
+        #00dcff;
+
+      top: 45px;
+      left: 60px;
+    }
+
+    .floating-chip {
+      position: absolute;
+
+      padding:
+        10px 14px;
+
+      border-radius: 13px;
+
+      background:
+        rgba(18,12,31,.78);
+
+      border:
+        1px solid
+        rgba(255,255,255,.1);
+
+      backdrop-filter: blur(12px);
+
+      color: #ded7e6;
+
+      font-size: 12px;
+
+      box-shadow:
+        0 15px 30px
+        rgba(0,0,0,.25);
+
+      z-index: 10;
+    }
+
+    .chip-one {
+      top: 25px;
+      left: 0;
+    }
+
+    .chip-two {
+      right: 0;
+      top: 110px;
+    }
+
+    .chip-three {
+      left: 5px;
+      bottom: 25px;
+    }
+
+
+    /* =========================
+       SECTIONS
+    ========================= */
+
+    section {
+      padding:
+        90px 6%;
+    }
+
+    .section-heading {
+      text-align: center;
+
+      margin-bottom: 45px;
+    }
+
+    .section-heading h2 {
+      font-size:
+        clamp(32px,5vw,50px);
+
+      margin-bottom: 12px;
+    }
+
+    .section-heading p {
+      color: #938a9f;
+
+      max-width: 650px;
+
+      margin: auto;
+
+      line-height: 1.7;
+    }
+
+
+    /* =========================
+       FEATURES
+    ========================= */
+
+    .features {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3,1fr);
+
+      gap: 20px;
+    }
+
+    .feature-card {
+      padding: 30px;
+
+      border-radius: 24px;
+
+      background:
+        rgba(255,255,255,.035);
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+
+      transition: .3s;
+    }
+
+    .feature-card:hover {
+      transform:
+        translateY(-6px);
+
+      border-color:
+        rgba(167,108,255,.3);
+
+      background:
+        rgba(255,255,255,.055);
+    }
+
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 16px;
+
+      margin-bottom: 20px;
+
+      font-size: 24px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(167,108,255,.18),
+          rgba(0,220,255,.12)
+        );
+    }
+
+    .feature-card h3 {
+      margin-bottom: 10px;
+
+      font-size: 19px;
+    }
+
+    .feature-card p {
+      color: #958d9f;
+
+      line-height: 1.7;
+
+      font-size: 14px;
+    }
+
+
+    /* =========================
+       WORKSPACE
+    ========================= */
+
+    .workspace {
+      max-width: 1150px;
+
+      margin: auto;
+    }
+
+    .workspace-grid {
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 22px;
+    }
+
+    .glass {
+      background:
+        rgba(255,255,255,.035);
+
+      border:
+        1px solid
+        rgba(255,255,255,.09);
+
+      border-radius: 25px;
+
+      padding: 25px;
+
+      backdrop-filter: blur(16px);
+
+      box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.18);
+    }
+
+    .card-title {
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      margin-bottom: 20px;
+    }
+
+    .card-title h3 {
+      font-size: 18px;
+    }
+
+    .status {
+      font-size: 11px;
+
+      padding:
+        6px 10px;
+
+      border-radius: 999px;
+
+      background:
+        rgba(0,220,255,.08);
+
+      color: #79eaff;
+
+      border:
+        1px solid
+        rgba(0,220,255,.16);
+    }
+
+
+    /* =========================
+       OCR UPLOAD
+    ========================= */
+
+    .upload-box {
+      min-height: 230px;
+
+      border:
+        1.5px dashed
+        rgba(167,108,255,.45);
+
+      border-radius: 20px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      flex-direction: column;
+
+      text-align: center;
+
+      padding: 25px;
+
+      cursor: pointer;
+
+      background:
+        rgba(167,108,255,.025);
+
+      transition: .25s;
+    }
+
+    .upload-box:hover {
+      border-color:
+        #a76cff;
+
+      background:
+        rgba(167,108,255,.07);
+    }
+
+    .upload-icon {
+      font-size: 42px;
+
+      margin-bottom: 15px;
+    }
+
+    .upload-box h4 {
+      margin-bottom: 8px;
+    }
+
+    .upload-box p {
+      color: #8e8698;
+
+      font-size: 13px;
+
+      line-height: 1.6;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    #preview {
+      width: 100%;
+
+      max-height: 230px;
+
+      object-fit: contain;
+
+      border-radius: 16px;
+
+      margin-top: 18px;
+
+      display: none;
+
+      background:
+        rgba(0,0,0,.25);
+    }
+
+    .ocr-status {
+      margin-top: 15px;
+
+      min-height: 20px;
+
+      color: #8eefff;
+
+      font-size: 13px;
+    }
+
+
+    /* =========================
+       TEXT EDITOR
+    ========================= */
+
+    textarea {
+      width: 100%;
+
+      min-height: 330px;
+
+      resize: vertical;
+
+      border: none;
+
+      outline: none;
+
+      border-radius: 18px;
+
+      padding: 20px;
+
+      background:
+        rgba(0,0,0,.22);
+
+      color: white;
+
+      font-family: inherit;
+
+      font-size: 17px;
+
+      line-height: 1.9;
+    }
+
+    textarea::placeholder {
+      color: #6f6878;
+    }
+
+    .editor-actions {
+      display: flex;
+
+      gap: 10px;
+
+      margin-top: 15px;
+
+      flex-wrap: wrap;
+    }
+
+    .small-btn {
+      padding:
+        10px 15px;
+
+      border-radius: 11px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.09);
+
+      background:
+        rgba(255,255,255,.05);
+
+      color: #ddd6e5;
+
+      cursor: pointer;
+
+      font-family: inherit;
+
+      transition: .2s;
+    }
+
+    .small-btn:hover {
+      background:
+        rgba(255,255,255,.09);
+    }
+
+
+    /* =========================
+       WORD EXPLORER
+    ========================= */
+
+    .word-box {
+      max-width: 800px;
+
+      margin: auto;
+    }
+
+    .search-row {
+      display: flex;
+
+      gap: 10px;
+
+      margin-bottom: 20px;
+    }
+
+    .search-row input {
+      flex: 1;
+
+      border:
+        1px solid
+        rgba(255,255,255,.1);
+
+      background:
+        rgba(255,255,255,.04);
+
+      color: white;
+
+      border-radius: 14px;
+
+      padding:
+        15px 18px;
+
+      outline: none;
+
+      font-family: inherit;
+
+      font-size: 16px;
+    }
+
+    .search-row input:focus {
+      border-color:
+        rgba(0,220,255,.45);
+    }
+
+    .word-result {
+      border-radius: 22px;
+
+      padding: 28px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(167,108,255,.08),
+          rgba(0,220,255,.04)
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+
+      min-height: 180px;
+    }
+
+    .word-kannada {
+      font-size: 42px;
+
+      margin-bottom: 8px;
+    }
+
+    .word-english {
+      color: #7ceaff;
+
+      margin-bottom: 18px;
+    }
+
+    .word-description {
+      color: #aaa1b1;
+
+      line-height: 1.7;
+    }
+
+
+    /* =========================
+       DEMO BUTTONS
+    ========================= */
+
+    .demo-row {
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 10px;
+
+      margin-top: 18px;
+    }
+
+    .demo-btn {
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+
+      background:
+        rgba(255,255,255,.04);
+
+      color: #d8d0df;
+
+      border-radius: 10px;
+
+      padding:
+        9px 13px;
+
+      cursor: pointer;
+
+      font-family: inherit;
+
+      font-size: 12px;
+    }
+
+    .demo-btn:hover {
+      border-color:
+        rgba(0,220,255,.3);
+    }
+
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      padding:
+        35px 6%;
+
+      border-top:
+        1px solid
+        rgba(255,255,255,.07);
+
+      text-align: center;
+
+      color: #706879;
+
+      font-size: 13px;
+    }
+
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 900px) {
+
+      .hero {
+        grid-template-columns: 1fr;
+
+        text-align: center;
+      }
+
+      .hero p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-buttons {
+        justify-content: center;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-art {
+        margin-top: 20px;
+      }
+
+      nav {
+        padding: 0 4%;
+      }
+
+      nav .links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 500px) {
+
+      h1 {
+        letter-spacing: -2px;
+      }
+
+      .kannada-orb {
+        width: 270px;
+        height: 270px;
+      }
+
+      .big-kannada {
+        font-size: 115px;
+      }
+
+      .orb-ring {
+        width: 315px;
+        height: 315px;
+      }
+
+      .chip-one {
+        left: -5px;
+      }
+
+      .chip-two {
+        right: -5px;
+      }
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+
+  <!-- =========================
+       NAVIGATION
+  ========================= -->
+
+  <nav>
+
+    <div class="logo">
+
+      <div class="logo-mark">
+        ಕ
+      </div>
+
+      <div>
+
+        NudiLens
+
+        <span>
+          ಕನ್ನಡದ ಡಿಜಿಟಲ್ ಕನ್ನಡಿ
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="links">
+
+      <a href="#features">
+        ವೈಶಿಷ್ಟ್ಯಗಳು
+      </a>
+
+      <a href="#ocr">
+        OCR
+      </a>
+
+      <a href="#explorer">
+        ಪದ ಅನ್ವೇಷಣೆ
+      </a>
+
+    </div>
+
+  </nav>
+
+
+
+  <!-- =========================
+       HERO
+  ========================= -->
+
+  <header class="hero">
+
+
+    <div class="hero-content">
+
+      <div class="eyebrow">
+        ಕನ್ನಡ • AI • Digital Heritage
+      </div>
+
+
+      <h1>
+
+        <span class="gradient-text">
+          ನಮ್ಮ ನುಡಿ.
+        </span>
+
+        <br>
+
+        ನಮ್ಮ ಡಿಜಿಟಲ್ ಭವಿಷ್ಯ.
+
+      </h1>
+
+
+      <p>
+
+        NudiLens ಕನ್ನಡದ ಬರಹವನ್ನು ಡಿಜಿಟಲ್
+        ಪಠ್ಯವಾಗಿ ಪರಿವರ್ತಿಸುತ್ತದೆ, ಪದಗಳ
+        ಅರ್ಥವನ್ನು ಅನ್ವೇಷಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ
+        ಮತ್ತು ಕನ್ನಡವನ್ನು ಕೇಳುವ ಅನುಭವವನ್ನೂ ನೀಡುತ್ತದೆ.
+
+      </p>
+
+
+      <div class="hero-buttons">
+
+        <button
+          class="btn btn-primary"
+          onclick="document.getElementById('ocr').scrollIntoView()">
+
+          ಕನ್ನಡ OCR ಪ್ರಾರಂಭಿಸಿ →
+
+        </button>
+
+
+        <button
+          class="btn btn-secondary"
+          onclick="document.getElementById('explorer').scrollIntoView()">
+
+          ಪದ ಅನ್ವೇಷಿಸಿ
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- CSS ONLY VISUAL -->
+
+    <div class="hero-art">
+
+      <div class="floating-chip chip-one">
+        ಕನ್ನಡ • ಕನ್ನಡ • ಕನ್ನಡ
+      </div>
+
+
+      <div class="floating-chip chip-two">
+        ✦ Kannada OCR
+      </div>
+
+
+      <div class="floating-chip chip-three">
+        🔊 ಕನ್ನಡ ಧ್ವನಿ
+      </div>
+
+
+      <div class="orb-ring"></div>
+
+
+      <div class="kannada-orb">
+
+        <div class="big-kannada">
+          ಕ
+        </div>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- =========================
+       FEATURES
+  ========================= -->
+
+  <section id="features">
+
+
+    <div class="section-heading">
+
+      <h2>
+        ಕನ್ನಡಕ್ಕಾಗಿ ನಿರ್ಮಿಸಲಾಗಿದೆ.
+      </h2>
+
+      <p>
+        ಒಂದು ಸಣ್ಣ ಆದರೆ ಶಕ್ತಿಯುತ
+        ಡಿಜಿಟಲ್ ಕನ್ನಡ workspace —
+        OCR, text exploration ಮತ್ತು
+        speech ಒಂದೇ ಜಾಗದಲ್ಲಿ.
+      </p>
+
+    </div>
+
+
+
+    <div class="features">
+
+
+      <div class="feature-card">
+
+        <div class="feature-icon">
+          📷
+        </div>
+
+        <h3>
+          ಕನ್ನಡ OCR
+        </h3>
+
+        <p>
+          ಚಿತ್ರದಲ್ಲಿರುವ ಕನ್ನಡ ಅಕ್ಷರಗಳನ್ನು
+          ಗುರುತಿಸಿ editable digital text
+          ಆಗಿ ಪರಿವರ್ತಿಸಿ.
+        </p>
+
+      </div>
+
+
+
+      <div class="feature-card">
+
+        <div class="feature-icon">
+          🔎
+        </div>
+
+        <h3>
+          ಪದ ಅನ್ವೇಷಣೆ
+        </h3>
+
+        <p>
+          ಕನ್ನಡ ಪದಗಳನ್ನು ಹುಡುಕಿ,
+          ಅವುಗಳ English meaning ಮತ್ತು
+          ಸರಳ ವಿವರಣೆಯನ್ನು ತಿಳಿಯಿರಿ.
+        </p>
+
+      </div>
+
+
+
+      <div class="feature-card">
+
+        <div class="feature-icon">
+          🔊
+        </div>
+
+        <h3>
+          ಕನ್ನಡ ಧ್ವನಿ
+        </h3>
+
+        <p>
+          ಪಠ್ಯವನ್ನು ಕನ್ನಡ ಧ್ವನಿಯಲ್ಲಿ ಕೇಳಿ.
+          ಕನ್ನಡ learning ಮತ್ತು accessibility
+          ಗೆ ಸಹಾಯಕ.
+        </p>
+
+      </div>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================
+       OCR WORKSPACE
+  ========================= -->
+
+  <section id="ocr">
+
+
+    <div class="workspace">
+
+
+      <div class="section-heading">
+
+        <h2>
+          ಕನ್ನಡ OCR Workspace
+        </h2>
+
+        <p>
+          ಕನ್ನಡದ ಪುಸ್ತಕ, ಫಲಕ, ನೋಟ್ಸ್ ಅಥವಾ
+          ಯಾವುದೇ ಚಿತ್ರವನ್ನು upload ಮಾಡಿ
+          ಮತ್ತು text ಪಡೆಯಿರಿ.
+        </p>
+
+      </div>
+
+
+
+      <div class="workspace-grid">
+
+
+        <!-- UPLOAD -->
+
+        <div class="glass">
+
+
+          <div class="card-title">
+
+            <h3>
+              📷 ಚಿತ್ರದಿಂದ ಪಠ್ಯ
+            </h3>
+
+            <span class="status">
+              Kannada OCR
+            </span>
+
+          </div>
+
+
+
+          <label
+            class="upload-box"
+            for="fileInput">
+
+            <div class="upload-icon">
+              🖼️
+            </div>
+
+            <h4>
+              ಕನ್ನಡ ಚಿತ್ರವನ್ನು ಇಲ್ಲಿ ಆಯ್ಕೆ ಮಾಡಿ
+            </h4>
+
+            <p>
+              JPG, PNG ಅಥವಾ JPEG
+              <br>
+              ಚಿತ್ರದಲ್ಲಿರುವ ಕನ್ನಡ ಪಠ್ಯವನ್ನು ಗುರುತಿಸಲಾಗುತ್ತದೆ
+            </p>
+
+          </label>
+
+
+          <input
+            type="file"
+            id="fileInput"
+            accept="image/*"
+          >
+
+
+          <img
+            id="preview"
+            alt="Uploaded Kannada image"
+          >
+
+
+          <div
+            id="ocrStatus"
+            class="ocr-status">
+          </div>
+
+
+
+          <div class="demo-row">
+
+            <button
+              class="demo-btn"
+              onclick="loadDemoText(1)">
+              Demo 1
+            </button>
+
+            <button
+              class="demo-btn"
+              onclick="loadDemoText(2)">
+              Demo 2
+            </button>
+
+            <button
+              class="demo-btn"
+              onclick="loadDemoText(3)">
+              Demo 3
+            </button>
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- TEXT EDITOR -->
+
+        <div class="glass">
+
+
+          <div class="card-title">
+
+            <h3>
+              ✍️ ನಿಮ್ಮ ಪಠ್ಯ
+            </h3>
+
+            <span class="status">
+              Editable
+            </span>
+
+          </div>
+
+
+
+          <textarea
+            id="textOutput"
+            placeholder="OCR ಮಾಡಿದ ಕನ್ನಡ ಪಠ್ಯ ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತದೆ..."></textarea>
+
+
+
+          <div class="editor-actions">
+
+            <button
+              class="small-btn"
+              onclick="copyText()">
+
+              📋 Copy
+
+            </button>
+
+
+            <button
+              class="small-btn"
+              onclick="speakText()">
+
+              🔊 ಕೇಳಿ
+
+            </button>
+
+
+            <button
+              class="small-btn"
+              onclick="clearText()">
+
+              ✕ Clear
+
+            </button>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================
+       WORD EXPLORER
+  ========================= -->
+
+  <section id="explorer">
+
+
+    <div class="word-box">
+
+
+      <div class="section-heading">
+
+        <h2>
+          ಕನ್ನಡ ಪದ ಅನ್ವೇಷಣೆ
+        </h2>
+
+        <p>
+          ಒಂದು ಕನ್ನಡ ಪದವನ್ನು ನಮೂದಿಸಿ
+          ಅದರ ಅರ್ಥವನ್ನು ಅನ್ವೇಷಿಸಿ.
+        </p>
+
+      </div>
+
+
+
+      <div class="search-row">
+
+        <input
+          id="wordInput"
+          type="text"
+          placeholder="ಉದಾ: ಕನ್ನಡ, ಮನೆ, ನೀರು..."
+          onkeydown="if(event.key==='Enter') searchWord()"
+        >
+
+
+        <button
+          class="btn btn-primary"
+          onclick="searchWord()">
+
+          ಹುಡುಕಿ
+
+        </button>
+
+      </div>
+
+
+
+      <div
+        class="word-result"
+        id="wordResult">
+
+
+        <div class="word-kannada">
+          ಕನ್ನಡ
+        </div>
+
+
+        <div class="word-english">
+          Kannada
+        </div>
+
+
+        <div class="word-description">
+
+          ಕರ್ನಾಟಕದ ಪ್ರಮುಖ ಭಾಷೆ.
+          ಕನ್ನಡವು ಶ್ರೀಮಂತ ಸಾಹಿತ್ಯ,
+          ಸಂಸ್ಕೃತಿ ಮತ್ತು ಸಾವಿರಾರು ವರ್ಷಗಳ
+          ಇತಿಹಾಸವನ್ನು ಹೊಂದಿದೆ.
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================
+       FOOTER
+  ========================= -->
+
+  <footer>
+
+    <div>
+      NudiLens • ಕನ್ನಡದ ಡಿಜಿಟಲ್ ಕನ್ನಡಿ
+    </div>
+
+    <div style="margin-top:8px;">
+      Built with ❤️ for Kannada
+    </div>
+
+  </footer>
+
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================= -->
+
+  <script>
+
+
+    /* =========================
+       ELEMENTS
+    ========================= */
+
+    const fileInput =
+      document.getElementById("fileInput");
+
+    const preview =
+      document.getElementById("preview");
+
+    const textOutput =
+      document.getElementById("textOutput");
+
+    const ocrStatus =
+      document.getElementById("ocrStatus");
+
+
+
+    /* =========================
+       OCR
+    ========================= */
+
+    fileInput.addEventListener(
+      "change",
+      async function () {
+
+        const file = this.files[0];
+
+        if (!file) {
+          return;
+        }
+
+
+        const imageURL =
+          URL.createObjectURL(file);
+
+
+        preview.src = imageURL;
+
+        preview.style.display =
+          "block";
+
+
+        textOutput.value = "";
+
+
+        ocrStatus.innerText =
+          "⏳ ಕನ್ನಡ OCR ಪ್ರಾರಂಭವಾಗುತ್ತಿದೆ...";
+
+
+        try {
+
+          const result =
+            await Tesseract.recognize(
+              file,
+              "kan",
+              {
+
+                logger: function(info) {
+
+                  if (
+                    info.status ===
+                    "recognizing text"
+                  ) {
+
+                    const progress =
+                      Math.round(
+                        info.progress * 100
+                      );
+
+                    ocrStatus.innerText =
+                      `🔎 ಕನ್ನಡ ಪಠ್ಯ ಗುರುತಿಸಲಾಗುತ್ತಿದೆ... ${progress}%`;
+
+                  }
+
+                  else {
+
+                    ocrStatus.innerText =
+                      "⏳ " + info.status;
+
+                  }
+
+                }
+
+              }
+            );
+
+
+          const text =
+            result.data.text.trim();
+
+
+          if (text.length > 0) {
+
+            textOutput.value =
+              text;
+
+            ocrStatus.innerText =
+              "✅ ಕನ್ನಡ ಪಠ್ಯ ಯಶಸ್ವಿಯಾಗಿ ಗುರುತಿಸಲಾಗಿದೆ!";
+
+          }
+
+          else {
+
+            ocrStatus.innerText =
+              "⚠️ ಪಠ್ಯ ಕಂಡುಬಂದಿಲ್ಲ. ಸ್ಪಷ್ಟವಾದ ಕನ್ನಡ ಚಿತ್ರವನ್ನು ಪ್ರಯತ್ನಿಸಿ.";
+
+          }
+
+
+        }
+
+        catch(error) {
+
+          console.error(error);
+
+          ocrStatus.innerText =
+            "❌ OCR ವಿಫಲವಾಗಿದೆ. ಮತ್ತೊಂದು ಚಿತ್ರವನ್ನು ಪ್ರಯತ್ನಿಸಿ.";
+
+        }
+
+      }
+    );
+
+
+
+    /* =========================
+       COPY
+    ========================= */
+
+    function copyText() {
+
+      const text =
+        textOutput.value.trim();
+
+
+      if (!text) {
+
+        alert(
+          "ಮೊದಲು ಪಠ್ಯವನ್ನು ನಮೂದಿಸಿ."
+        );
+
+        return;
+
+      }
+
+
+      navigator.clipboard
+        .writeText(text)
+
+        .then(() => {
+
+          alert(
+            "✅ ಪಠ್ಯವನ್ನು Copy ಮಾಡಲಾಗಿದೆ!"
+          );
+
+        })
+
+        .catch(() => {
+
+          textOutput.select();
+
+          document.execCommand(
+            "copy"
+          );
+
+          alert(
+            "✅ ಪಠ್ಯವನ್ನು Copy ಮಾಡಲಾಗಿದೆ!"
+          );
+
+        });
+
+    }
+
+
+
+    /* =========================
+       SPEECH
+    ========================= */
+
+    function speakText() {
+
+      const text =
+        textOutput.value.trim();
+
+
+      if (!text) {
+
+        alert(
+          "ಮೊದಲು ಕನ್ನಡ ಪಠ್ಯವನ್ನು ನಮೂದಿಸಿ."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        !("speechSynthesis" in window)
+      ) {
+
+        alert(
+          "ಈ browser ನಲ್ಲಿ speech support ಇಲ್ಲ."
+        );
+
+        return;
+
+      }
+
+
+      speechSynthesis.cancel();
+
+
+      const speech =
+        new SpeechSynthesisUtterance(
+          text
+        );
+
+
+      speech.lang = "kn-IN";
+
+      speech.rate = .85;
+
+      speech.pitch = 1;
+
+
+      speechSynthesis.speak(
+        speech
+      );
+
+    }
+
+
+
+    /* =========================
+       CLEAR
+    ========================= */
+
+    function clearText() {
+
+      textOutput.value = "";
+
+      preview.style.display =
+        "none";
+
+      preview.src = "";
+
+      fileInput.value = "";
+
+      ocrStatus.innerText = "";
+
+    }
+
+
+
+    /* =========================
+       DEMO TEXT
+    ========================= */
+
+    function loadDemoText(number) {
+
+      const demos = {
+
+        1:
+          "ಕನ್ನಡವು ಕರ್ನಾಟಕದ ಅಧಿಕೃತ ಭಾಷೆ. ಕನ್ನಡ ಸಾಹಿತ್ಯವು ಶ್ರೀಮಂತ ಪರಂಪರೆಯನ್ನು ಹೊಂದಿದೆ.",
+
+        2:
+          "ಮೈಸೂರು ಅರಮನೆ ಕರ್ನಾಟಕದ ಪ್ರಸಿದ್ಧ ಪ್ರವಾಸಿ ತಾಣಗಳಲ್ಲಿ ಒಂದು. ಇದರ ವಾಸ್ತುಶಿಲ್ಪ ಬಹಳ ಸುಂದರವಾಗಿದೆ.",
+
+        3:
+          "ಹಂಪಿ ವಿಜಯನಗರ ಸಾಮ್ರಾಜ್ಯದ ಐತಿಹಾಸಿಕ ನಗರವಾಗಿದ್ದು, ಇಂದು ವಿಶ್ವದ ಪ್ರಸಿದ್ಧ ಪಾರಂಪರಿಕ ತಾಣವಾಗಿದೆ."
+
+      };
+
+
+      textOutput.value =
+        demos[number];
+
+
+      ocrStatus.innerText =
+        "✅ Demo Kannada text loaded.";
+
+    }
+
+
+
+    /* =========================
+       DICTIONARY
+    ========================= */
+
+    const dictionary = {
+
+      "ಕನ್ನಡ": {
+
+        english:
+          "Kannada",
+
+        description:
+          "ಕರ್ನಾಟಕದ ಪ್ರಮುಖ ಭಾಷೆ. ಕನ್ನಡವು ಶ್ರೀಮಂತ ಸಾಹಿತ್ಯ, ಸಂಸ್ಕೃತಿ ಮತ್ತು ದೀರ್ಘ ಇತಿಹಾಸವನ್ನು ಹೊಂದಿದೆ."
+
+      },
+
+
+      "ಮನೆ": {
+
+        english:
+          "House / Home",
+
+        description:
+          "ಜನರು ವಾಸಿಸುವ ಸ್ಥಳ. ಕುಟುಂಬದ ಜೀವನದ ಪ್ರಮುಖ ಭಾಗ."
+
+      },
+
+
+      "ನೀರು": {
+
+        english:
+          "Water",
+
+        description:
+          "ಜೀವನಕ್ಕೆ ಅಗತ್ಯವಾದ ನೈಸರ್ಗಿಕ ಸಂಪನ್ಮೂಲ."
+
+      },
+
+
+      "ಬೆಳಕು": {
+
+        english:
+          "Light",
+
+        description:
+          "ಕತ್ತಲೆಯನ್ನು ದೂರ ಮಾಡುವ ಪ್ರಕಾಶ."
+
+      },
+
+
+      "ಹೂವು": {
+
+        english:
+          "Flower",
+
+        description:
+          "ಸಸ್ಯಗಳಲ್ಲಿ ಅರಳುವ ಸುಂದರ ಭಾಗ."
+
+      },
+
+
+      "ಸ್ನೇಹ": {
+
+        english:
+          "Friendship",
+
+        description:
+          "ಇಬ್ಬರು ಅಥವಾ ಹೆಚ್ಚು ಜನರ ನಡುವಿನ ಆತ್ಮೀಯ ಸಂಬಂಧ."
+
+      },
+
+
+      "ಕರ್ನಾಟಕ": {
+
+        english:
+          "Karnataka",
+
+        description:
+          "ಭಾರತದ ದಕ್ಷಿಣ ಭಾಗದಲ್ಲಿರುವ ರಾಜ್ಯ. ಇದರ ರಾಜಧಾನಿ ಬೆಂಗಳೂರು."
+
+      },
+
+
+      "ಮೈಸೂರು": {
+
+        english:
+          "Mysuru",
+
+        description:
+          "ಕರ್ನಾಟಕದ ಪ್ರಸಿದ್ಧ ಸಾಂಸ್ಕೃತಿಕ ನಗರ."
+
+      },
+
+
+      "ಹಂಪಿ": {
+
+        english:
+          "Hampi",
+
+        description:
+          "ವಿಜಯನಗರ ಸಾಮ್ರಾಜ್ಯದ ಐತಿಹಾಸಿಕ ಅವಶೇಷಗಳಿಗೆ ಪ್ರಸಿದ್ಧವಾದ ಸ್ಥಳ."
+
+      },
+
+
+      "ಪುಸ್ತಕ": {
+
+        english:
+          "Book",
+
+        description:
+          "ಜ್ಞಾನ, ಮಾಹಿತಿ ಅಥವಾ ಕಥೆಗಳನ್ನು ಒಳಗೊಂಡಿರುವ ಬರಹದ ಕೃತಿ."
+
+      }
+
+    };
+
+
+
+    /* =========================
+       WORD SEARCH
+    ========================= */
+
+    function searchWord() {
+
+      const input =
+        document.getElementById(
+          "wordInput"
+        );
+
+
+      const result =
+        document.getElementById(
+          "wordResult"
+        );
+
+
+      const word =
+        input.value.trim();
+
+
+      if (!word) {
+
+        result.innerHTML = `
+
+          <div class="word-kannada">
+            ಕನ್ನಡ
+          </div>
+
+          <div class="word-english">
+            Kannada
+          </div>
+
+          <div class="word-description">
+            ಒಂದು ಕನ್ನಡ ಪದವನ್ನು ನಮೂದಿಸಿ.
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      const data =
+        dictionary[word];
+
+
+      if (data) {
+
+        result.innerHTML = `
+
+          <div class="word-kannada">
+            ${word}
+          </div>
+
+          <div class="word-english">
+            ${data.english}
+          </div>
+
+          <div class="word-description">
+            ${data.description}
+          </div>
+
+        `;
+
+      }
+
+      else {
+
+        result.innerHTML = `
+
+          <div class="word-kannada">
+            ${word}
+          </div>
+
+          <div class="word-english">
+            Word found
+          </div>
+
+          <div class="word-description">
+            ಈ ಪದಕ್ಕೆ demo dictionary ಯಲ್ಲಿ
+            ಅರ್ಥ ಲಭ್ಯವಿಲ್ಲ.
+            ಮುಂದಿನ version ನಲ್ಲಿ ಇನ್ನಷ್ಟು
+            ಕನ್ನಡ ಪದಗಳನ್ನು ಸೇರಿಸಬಹುದು.
+          </div>
+
+        `;
+
+      }
+
+    }
+
+  </script>
+
+</body>
+</html>
